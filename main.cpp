@@ -1,3 +1,5 @@
+#include <chrono>
+#include <ctime>
 #include <iomanip>
 #include <iostream>
 #include <random>
@@ -104,6 +106,7 @@ void t6() {
     integers = NULL;
 }
 
+
 /**
  * optimization level optim
  * 0 = brute force
@@ -131,15 +134,46 @@ char recurringChar(string &src, short optim) {
     return src.at(0);
 }
 
-int main() {
-    string test1 = "ABAC";
-    string test2 = "abcdefghijklmk";
-    string test3 = "exwlzgfkuerzcmumczemhouczmeriuczoaucmraucoreuzacmuzcgeiuezcrmrecziuzeg";
 
-    cout << "Source is -> " << test1 << endl;
-    cout << "Result is -> " << recurringChar(test1, 0) << endl;
-    cout << "Source is -> " << test2 << endl;
-    cout << "Result is -> " << recurringChar(test2, 0) << endl;
-    cout << "Source is -> " << test3 << endl;
-    cout << "Result is -> " << recurringChar(test3, 0) << endl;
+void testReccuringChar() {
+
+    vector<string> test = {
+        "ABAC", //expected result: A
+        "abcdefghijklmk", //expected result: k
+        "exwlzgfkuerzcmumczemhouczmeriuczoaucmraucoreuzacmuzcgeiuezcrmrecziuzeg" //expected result: e
+    };
+
+    int testNumber = 0;
+
+    for (string item : test) {
+        cout << endl << "##########################################################\n"
+                << "Test " << ++testNumber << endl
+                << "------\n"
+                << "Source is -> " << item << endl;
+
+        std::clock_t c_start = std::clock();
+        auto t_start = std::chrono::high_resolution_clock::now();
+
+        cout << "Result is -> " << recurringChar(item, 0) << endl;
+
+        std::clock_t c_end = std::clock();
+        auto t_end = std::chrono::high_resolution_clock::now();
+
+        cout << endl << std::fixed << std::setprecision(6) << "CPU time used: "
+                << 1000.0 * (c_end - c_start) / CLOCKS_PER_SEC << " ms\n"
+                << "Wall clock time passed: "
+                << std::chrono::duration<double, std::milli>(t_end-t_start).count()
+                << " ms\n"
+                << "##########################################################\n";
+    }
+
+    cout << endl;
+}
+
+
+int main() {
+
+    testReccuringChar();
+
+    return 0;
 }
