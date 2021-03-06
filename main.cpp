@@ -1,6 +1,9 @@
+#include <chrono>
+#include <ctime>
 #include <iomanip>
 #include <iostream>
 #include <random>
+#include <string>
 
 #include "banker.h"
 
@@ -8,6 +11,7 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::setw;
+using std::string;
 using std::vector;
 
 
@@ -101,6 +105,75 @@ void t6() {
     delete[]integers;
     integers = NULL;
 }
+
+
+/**
+ * optimization level optim
+ * 0 = brute force
+ * 1 = 2nd approach
+ * 2 = sophisticated
+ */
+char recurringChar(string &src, short optim) {
+    
+    // brute force
+    if (optim == 0) {
+        char srcChar;
+        int srcLength = src.length();
+        for(int i = 0; i < srcLength-1; i++) { // last char is irrelevant
+            srcChar = src.at(i);
+            for(int j = i + 1; j < srcLength; j++) {
+                if (srcChar == src.at(j)) {
+                    return srcChar;
+                }
+            }
+        }
+        return '\0'; // no match found
+    }
+
+
+    return src.at(0);
+}
+
+
+void testReccuringChar() {
+
+    vector<string> test = {
+        "ABAC", //expected result: A
+        "abcdefghijklmk", //expected result: k
+        "exwlzgfkuerzcmumczemhouczmeriuczoaucmraucoreuzacmuzcgeiuezcrmrecziuzeg" //expected result: e
+    };
+
+    int testNumber = 0;
+
+    for (string item : test) {
+        cout << endl << "##########################################################\n"
+                << "Test " << ++testNumber << endl
+                << "------\n"
+                << "Source is -> " << item << endl;
+
+        std::clock_t c_start = std::clock();
+        auto t_start = std::chrono::high_resolution_clock::now();
+
+        cout << "Result is -> " << recurringChar(item, 0) << endl;
+
+        std::clock_t c_end = std::clock();
+        auto t_end = std::chrono::high_resolution_clock::now();
+
+        cout << endl << std::fixed << std::setprecision(6) << "CPU time used: "
+                << 1000.0 * (c_end - c_start) / CLOCKS_PER_SEC << " ms\n"
+                << "Wall clock time passed: "
+                << std::chrono::duration<double, std::milli>(t_end-t_start).count()
+                << " ms\n"
+                << "##########################################################\n";
+    }
+
+    cout << endl;
+}
+
+
 int main() {
-    t6();
+
+    testReccuringChar();
+
+    return 0;
 }
