@@ -1,6 +1,7 @@
 #include <iomanip>
 #include <iostream>
 #include <random>
+#include <string>
 
 #include "banker.h"
 
@@ -8,6 +9,7 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::setw;
+using std::string;
 using std::vector;
 
 
@@ -101,6 +103,43 @@ void t6() {
     delete[]integers;
     integers = NULL;
 }
+
+/**
+ * optimization level optim
+ * 0 = brute force
+ * 1 = 2nd approach
+ * 2 = sophisticated
+ */
+char recurringChar(string &src, short optim) {
+    
+    // brute force
+    if (optim == 0) {
+        char srcChar;
+        int srcLength = src.length();
+        for(int i = 0; i < srcLength-1; i++) { // last char is irrelevant
+            srcChar = src.at(i);
+            for(int j = i + 1; j < srcLength; j++) {
+                if (srcChar == src.at(j)) {
+                    return srcChar;
+                }
+            }
+        }
+        return '\0'; // no match found
+    }
+
+
+    return src.at(0);
+}
+
 int main() {
-    t6();
+    string test1 = "ABAC";
+    string test2 = "abcdefghijklmk";
+    string test3 = "exwlzgfkuerzcmumczemhouczmeriuczoaucmraucoreuzacmuzcgeiuezcrmrecziuzeg";
+
+    cout << "Source is -> " << test1 << endl;
+    cout << "Result is -> " << recurringChar(test1, 0) << endl;
+    cout << "Source is -> " << test2 << endl;
+    cout << "Result is -> " << recurringChar(test2, 0) << endl;
+    cout << "Source is -> " << test3 << endl;
+    cout << "Result is -> " << recurringChar(test3, 0) << endl;
 }
