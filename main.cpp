@@ -50,9 +50,15 @@ Task getFirstRecurringCharUsingMap(Task task) {
 
 
 Task profiler(Task (*func)(Task), Task task) {
-    cout << "mes start\n";
+
+    std::clock_t c_start = std::clock();
+    auto t_start = std::chrono::high_resolution_clock::now();
+
     task = func(task);
-    cout << "mes end\n";
+
+    auto t_end = std::chrono::high_resolution_clock::now();
+    task.duration = std::chrono::duration<double, std::milli>(t_end-t_start).count();
+
     return task;
 }
 
@@ -65,7 +71,7 @@ vector<Task> initTasks(vector<string> sources) {
 
         Task task = {
             "",
-            "",
+            -1.0,
             src,
             '\0'
         };
@@ -101,14 +107,11 @@ int main() {
     };
 
     vector<Task> tasks = initTasks(sources);
-    /* Task task;
-    task = profiler(&core, task);*/
 
-    for(int i = 0; i < funcs.size(); i++) {
+    for(auto func : funcs) {
 
-        for (Task task : tasks) {
-            task = funcs[i](task);
-            /* task = profiler(&funcs[i], task); */
+        for (Task &task : tasks) {
+            task = profiler(func, task);
             printResult(task);
         }
 

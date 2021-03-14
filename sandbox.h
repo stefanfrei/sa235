@@ -4,7 +4,7 @@
 
 struct Task {
     std::string funcName;
-    std::string duration;
+    double duration;
     std::string src;
     char result;
 };
